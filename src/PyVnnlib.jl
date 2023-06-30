@@ -2,8 +2,8 @@ module PyVnnlib
 
 using PyCall, JLD2
 
-const vnnlib = PyNull()
-const compat = PyNull()
+const vnnlib = PyNULL()
+const compat = PyNULL()
 
 function __init__()
     pushfirst!(PyVector(pyimport("sys")["path"]), @__DIR__)
