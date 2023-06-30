@@ -48,7 +48,7 @@ function get_speclist(props; dtype=nothing)
         # list of (A, b) s.t. Ax ≤ b
         out_specs = []
         for (A, b) in output_specs
-            A = isnothing(dtpye) ? A : dtype.(A)
+            A = isnothing(dtype) ? A : dtype.(A)
             b = isnothing(dtype) ? b : dtype.(b)
 
             if ndims(A) != 2
