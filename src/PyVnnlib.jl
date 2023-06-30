@@ -36,7 +36,7 @@ Generate list of specifications [(l, u, [(A, b)])] of
 - input bounds l, u for each input 
 - polytopes Ax ≤ b over each common input space (s.t. property is SAT, if one of the polytopes is SAT)
 """
-function get_speclist(props)
+function get_speclist(props; dtype=nothing)
     specs = []
     for i in axes(props,1)
         bounds = props[i,1]
@@ -47,6 +47,13 @@ function get_speclist(props)
 
         # list of (A, b) s.t. Ax ≤ b
         out_specs = [(o[1], o[2]) for o in output_specs]
+
+        if !isnothing(dtype)
+            lbs = dtype.(lbs)
+            ubs = dtype.(ubs)
+            out_specs = [(dtype.(A), dtype.(b)) for (A, b) in out_specs]
+        end
+        
         push!(specs, (lbs, ubs, out_specs))
     end
 
