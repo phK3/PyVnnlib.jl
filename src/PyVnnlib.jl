@@ -66,9 +66,9 @@ Generate list of specifications [(l, u, [(A, b)])] from a vnnlib file of
 - input bounds l, u for each input 
 - polytopes A₁x ≤ b₁ ∨ A₂x ≤ b₂ ∨ ... over each common input space
 """
-function generate_specs(vnnlib_file; verbosity=0)
+function generate_specs(vnnlib_file; verbosity=0, dtype=nothing)
     props = parse_properties(vnnlib_file, verbosity=verbosity)
-    speclist = get_speclist(props)
+    speclist = get_speclist(props, dtype=dtype)
 
     return speclist
 end
@@ -89,8 +89,8 @@ args:
     vnnlib_file - either a .vnnlib or a .vnnlib.gz file
     outfile - name of output file has to end in .jld2
 """
-function save_specs(vnnlib_file, outfile; verbosity=0)
-    speclist = generate_specs(vnnlib_file, verbosity=verbosity)
+function save_specs(vnnlib_file, outfile; verbosity=0, dtype=nothing)
+    speclist = generate_specs(vnnlib_file, verbosity=verbosity, dtype=dtype)
 
     save(outfile, "speclist", speclist)
 end
