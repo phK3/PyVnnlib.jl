@@ -46,12 +46,22 @@ function get_speclist(props; dtype=nothing)
         output_specs = props[i,2]
 
         # list of (A, b) s.t. Ax ≤ b
-        out_specs = [(o[1], o[2]) for o in output_specs]
+        out_specs = []
+        for (A, b) in output_specs
+            A = isnothing(dtpye) ? A : dtype.(A)
+            b = isnothing(dtype) ? b : dtype.(b)
 
-        if !isnothing(dtype)
-            lbs = dtype.(lbs)
-            ubs = dtype.(ubs)
-            out_specs = [(dtype.(A), dtype.(b)) for (A, b) in out_specs]
+            if ndims(A) != 2
+                println("Warning! Output constraints have to be polytopes, found A with size $(size(A)) - try flattening")
+                A = reshape(A, :, size(A)[end])
+            end
+
+            if ndims(b) != 1
+                println("Warning! Output constraints have to be polytopes, found b with size $(size(b)) - trying vec(b)")
+                b = vec(b)
+            end
+
+            push!(out_specs, (A, b))
         end
         
         push!(specs, (lbs, ubs, out_specs))
